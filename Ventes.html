@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventes.html</title>
+</head>
+
+<body>
+    <h1 style="text-align: center;">Vente 2023</h1>
+    <div id="graphContainer" style="margin: auto; width: 900px; height:900px;"></div>
+
+    <script defer>
+
+        const svgns = "http://www.w3.org/2000/svg";
+        let viewPortMaxUnitX = 1000;
+        let viewPortMaxUnitY = 1000;
+
+        let mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+        let ventes = [6500, 5550, 4200, 4525, 2500, 1500, 500, 1000, 1750, 2300, 3700, 3500];
+
+        let viewport = null;
+        init_UI();
+
+        // done
+        function init_UI() {
+            insertViewPort("graphContainer");
+            barGraph();
+        }
+
+
+        // done
+        function insertViewPort(containerId) {
+            viewport = document.createElementNS(svgns, "svg");
+            viewport.setAttribute("id", "viewport");
+            viewport.setAttribute("viewBox", "0 0 " + viewPortMaxUnitX + " " + viewPortMaxUnitY);
+            document.getElementById(containerId).appendChild(viewport);
+        }
+
+        function inBetween(nb, lower, upper) {
+            return lower <= nb && nb <= upper;
+        };
+
+        function barGraph() {
+
+            let barMargin = 10;
+            let barWidth = 38;// trouver un calcul ici**
+
+
+            let salesSpace = 100;
+            let monthsSpace = 100;
+            let barPos = monthsSpace + barMargin;
+
+
+
+
+            //Lines
+            for (let y = 0; y < 7000; y += 100) {
+                viewport.appendChild(line(salesSpace, y / 10 + monthsSpace + 150, viewPortMaxUnitX - salesSpace, y / 10 + monthsSpace + 150, "gray"));
+            }
+            for (let y = 0; y < 8000; y += 1000) {
+                viewport.appendChild(line(salesSpace, y / 10 + monthsSpace + 150, viewPortMaxUnitX - salesSpace, y / 10 + monthsSpace + 150, "black"));
+
+                let salesText = text(salesSpace - 10, monthsSpace + y / 10 + 140, "$ " + y, 0, 2);
+                salesText.setAttribute("text-anchor", "end");
+                viewport.appendChild(salesText);
+            }
+
+
+
+            //Bars
+            for (let v = 0; v < ventes.length; v++) {
+                let value = ventes[v];
+                if (inBetween(value, 0, 1000))
+                    viewport.appendChild(rect(barPos, v / 10 + monthsSpace + 150, barWidth, ventes[v] / 10, "red", "black", 0.5));
+                else if (inBetween(value, 1000, 3000))
+                    viewport.appendChild(rect(barPos, v / 10 + monthsSpace + 150, 40, ventes[v] / 10, "orange", "black", 0.5));
+                else if (inBetween(value, 3000, 4500))
+                    viewport.appendChild(rect(barPos, v / 10 + monthsSpace + 150, 40, ventes[v] / 10, "yellow", "black", 0.5));
+                else
+                    viewport.appendChild(rect(barPos, v / 10 + monthsSpace + 150, 40, ventes[v] / 10, "green", "black", 0.5));
+
+
+                viewport.appendChild(text(barPos + barWidth / 2, v / 10 + monthsSpace + 100, mois[v], 45, 2));
+                barPos += barWidth + 3 * barMargin;
+            }
+        }
+
+
+        // done
+        function line(x1, y1, x2, y2, stroke = "black", strokeWidth = 1) {
+            let line = document.createElementNS(svgns, "line");
+            line.setAttribute("x1", x1); line.setAttribute("y1", viewPortMaxUnitY - y1);
+            line.setAttribute("x2", x2); line.setAttribute("y2", viewPortMaxUnitY - y2);
+            line.setAttribute("stroke", stroke);
+            line.setAttribute("stroke-width", strokeWidth);
+            return line;
+        }
+
+        function rect(x, y, width, height, fill = "white", stroke = "black", strokeWidth = 1) {
+            let rect = document.createElementNS(svgns, "rect");
+            rect.setAttribute("x", x); rect.setAttribute("y", viewPortMaxUnitY - y - height);
+            rect.setAttribute("width", width); rect.setAttribute("height", height);
+            rect.setAttribute("fill", fill); rect.setAttribute("stroke", stroke);
+            rect.setAttribute("stroke-width", strokeWidth);
+            return rect;
+        }
+
+        // 90% done
+        function text(x, y, content, angle = 0, size = "1", fill = "black") {
+            let text = document.createElementNS(svgns, "text");
+            text.setAttribute("x", x); text.setAttribute("y", viewPortMaxUnitY - y);
+            text.setAttribute("transform", `rotate(${angle},${x},${viewPortMaxUnitY - y})`);
+            text.setAttribute("font-size", size + "em");
+            text.setAttribute("fill", fill);
+            text.innerHTML = content;
+            return text;
+        }
+    </script>
+</body>
+
+</html>
