@@ -24,14 +24,13 @@
         let viewport = null;
         init_UI();
 
-        // done
+
         function init_UI() {
             insertViewPort("graphContainer");
             barGraph();
         }
 
 
-        // done
         function insertViewPort(containerId) {
             viewport = document.createElementNS(svgns, "svg");
             viewport.setAttribute("id", "viewport");
@@ -69,7 +68,6 @@
             }
 
 
-
             //Bars
             for (let v = 0; v < ventes.length; v++) {
                 let value = ventes[v];
@@ -89,7 +87,7 @@
         }
 
 
-        // done
+
         function line(x1, y1, x2, y2, stroke = "black", strokeWidth = 1) {
             let line = document.createElementNS(svgns, "line");
             line.setAttribute("x1", x1); line.setAttribute("y1", viewPortMaxUnitY - y1);
@@ -108,7 +106,7 @@
             return rect;
         }
 
-        // 90% done
+
         function text(x, y, content, angle = 0, size = "1", fill = "black") {
             let text = document.createElementNS(svgns, "text");
             text.setAttribute("x", x); text.setAttribute("y", viewPortMaxUnitY - y);
